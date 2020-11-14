@@ -14,6 +14,7 @@
 <link href="static/jquery-ui/jquery-ui.css" rel="stylesheet">
 <script src="static/jquery-ui/external/jquery/jquery.js"></script>
 <script src="static/jquery-ui/jquery-ui.js"></script>
+<script src="/localhosts/jsonrequest"></script>
 
 <style>
 
@@ -96,29 +97,13 @@
             <h5>Time:</h5> <div id=Time></div> 
             <h5>Link:</h5> <div id=link></div>        
 </div>
-
+ <% out.println((new java.util.Date()).toLocaleString()); %>
 </body>
 </html>
 <script>
-
-
-var data = [];  // data object will need to pass the data from the server 
-var myObj  = []; // 
-
-myObj = {         // this is for testing 
-  "title":'list that that gets loaded',
-  "start":'2020-10-01',
-  "url" : 'https://www.google.com/'
-};
-data.push(myObj); // remove  for testing 
-
 $( document ).ready(function() { // this will auto hide the div for event UI when the DOM is ready to be loaded. 
-  $( "#EventDiv").hide();
-  $("#dialog").hide();
-
-
-	
-	
+  	$("#EventDiv").hide();
+	$("#dialog").hide();
 	test();
 	
 });
@@ -158,7 +143,7 @@ data.push(newRec); // adds new json rec
  // logic below refreshes the new  events that were added 
   var calendarEl = document.getElementById('calendar');
   var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialDate: '2020-10-12',
+      initialDate: start,
       editable: true,
       selectable: true,
       businessHours: true,
@@ -193,17 +178,13 @@ function test(){
 	var calendarEl = document.getElementById('calendar');
 	
     var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialDate: '2020-10-12',
+      initialDate: new Date(),
       editable: true,
       selectable: true,
       businessHours: true,
       dayMaxEvents: true, // allow "more" link when too many events
-      events: data
-
-       
-
-      ,
-            eventClick: function(info) {
+      events: data,
+      eventClick: function(info) {
           info.jsEvent.preventDefault(); // don't let the browser navigate
 
           if (info.event.url) {
