@@ -157,7 +157,7 @@ data.push(newRec); // adds new json rec
 
 
            	  $('#nameOfEvent').html(info.event.title);
-              $('#link').html('<a class="btn btn-outline-primary btn-sm"  href="' + info.event.url + ' ">Luanch Meeting </a>');
+              $('#link').html('<a class="btn btn-outline-primary btn-sm"  href="' + info.event.url + ' ">Lunch Meeting </a>');
               $('#Time').html(info.event.start);
               $( "#dialog" ).dialog({title: "Event Info", width: 500 });
 
@@ -193,7 +193,7 @@ function test(){
 
      
            	  $('#nameOfEvent').html(info.event.title);
-              $('#link').html('<a class="btn btn-outline-primary btn-sm"  href="' + info.event.url + ' ">Luanch Meeting </a>');
+              $('#link').html('<a class="btn btn-outline-primary btn-sm"  href="' + info.event.url + ' ">Lunch Meeting </a>');
               $('#Time').html(info.event.start);
               $( "#dialog" ).dialog({title: "Event Info", width: 500 });
 
