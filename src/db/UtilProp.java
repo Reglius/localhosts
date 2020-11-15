@@ -12,10 +12,9 @@ public class UtilProp {
 
    public static void loadProperty(ServletContext servletContext) throws Exception {
       String filePath = "/WEB-INF/config.properties";
-      InputStream is = servletContext.getResourceAsStream(filePath);
-
-      System.out.println("[DBG] Loaded: " + new File(filePath).getAbsolutePath());
-      prop.load(is);
+      InputStream stream = servletContext.getResourceAsStream(filePath);
+      
+      prop.load(stream);
       if (prop.isEmpty()) {
     	  System.out.println("dummy");
       }

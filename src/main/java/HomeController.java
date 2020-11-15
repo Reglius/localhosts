@@ -31,7 +31,7 @@ public class HomeController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JSONArray array = getArray();
 		
-		String user = request.getHeader("user");
+		String user = (String) request.getAttribute("userid");
 		response.setContentType("application/javascript");
 		response.getWriter().append("var data = " + array.toString());
 	}
