@@ -15,13 +15,13 @@ import org.json.JSONObject;
  * Servlet implementation class Home
  */
 @WebServlet(urlPatterns = {"/jsonrequest"})
-public class HomeController extends HttpServlet {
+public class JSONRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public HomeController() {
+    public JSONRequest() {
         super();
     }
 
@@ -31,7 +31,14 @@ public class HomeController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JSONArray array = getArray();
 		
-		String user = (String) request.getAttribute("userid");
+		String user = request.getParameter("userId");
+		
+		JSONObject dataSet = new JSONObject();
+        dataSet.put("title", user);
+        dataSet.put("url", "https://www.google.com/");
+        dataSet.put("start", "2020-11-05");
+        array.put(dataSet);
+        
 		response.setContentType("application/javascript");
 		response.getWriter().append("var data = " + array.toString());
 	}

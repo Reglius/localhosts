@@ -14,7 +14,7 @@
 <link href="static/jquery-ui/jquery-ui.css" rel="stylesheet">
 <script src="static/jquery-ui/external/jquery/jquery.js"></script>
 <script src="static/jquery-ui/jquery-ui.js"></script>
-<script src="/localhosts/jsonrequest"></script>
+<script src="/localhosts/jsonrequest?userId=<%= request.getParameter("userId") %>"></script>
 
 <style>
 
