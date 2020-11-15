@@ -16,6 +16,9 @@ public class UtilProp {
 
       System.out.println("[DBG] Loaded: " + new File(filePath).getAbsolutePath());
       prop.load(is);
+      if (prop.isEmpty()) {
+    	  System.out.println("dummy");
+      }
    }
 
    public static String getProp(String key) {

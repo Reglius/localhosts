@@ -28,14 +28,23 @@ public class DBConnection extends HttpServlet {
 	}
 	
 	static String getURL() {
-		return UtilProp.getProp("url");
+		String url = UtilProp.getProp("url");
+		return url;
 	}
 	
 	static String getUserName() {
-		return UtilProp.getProp("user");
+		String user = UtilProp.getProp("user");
+		return user;
 	}
 	
 	static String getPassword() {
-		return UtilProp.getProp("password");
+		String password = UtilProp.getProp("password");
+		return password;
 	}
+
+	static void getDBConnection(ServletContext context) {
+		servletContext = context;
+		getDBConnection();
+	}
+	
 }
