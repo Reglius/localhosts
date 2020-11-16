@@ -4,7 +4,9 @@ public class Events {
 	   private int id;
 	   private String utoken; 
 	   private String date;   
-	   private String recurringID;  
+	   private String recurringID; 
+	   private String title;
+	   private String url;
 
 	   public Events() {}
 	   
@@ -46,8 +48,24 @@ public class Events {
 	      this.recurringID = recurringID;
 	   }
 	   
+	   public String getTitle() {
+	      return title;
+	   }
+	   
+	   public void setTitle( String title ) {
+	      this.title = title;
+	   }
+	   
+	   public String getURL() {
+	      return url;
+	   }
+	   
+	   public void setURL( String url) {
+	      this.url = url;
+	   }
+	   
 	   @Override
 	   public String toString() {
-		   return String.format("%s, %s, %s, %s", id, utoken, date,recurringID);
+		   return String.format("%s, %s, %s, %s, %s, %s", id, utoken, date,recurringID, title, url);
 	   }
 	}

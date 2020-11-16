@@ -24,26 +24,14 @@ public class DBConnection extends HttpServlet {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			UtilProp.loadProperty(context);
-			connection = DriverManager.getConnection(getURL(), getUserName(), getPassword());
+			connection = DriverManager.getConnection(UtilProp.getProp("url"), UtilProp.getProp("user"), UtilProp.getProp("password"));
 		
 		} catch(Exception e) {
 			e.printStackTrace();
 			return;
 		}
 	}
-	
-	private String getURL() {
-		return UtilProp.getProp("url");
-	}
-	
-	private String getUserName() {
-		return UtilProp.getProp("user");
-	}
-	
-	private String getPassword() {
-		return UtilProp.getProp("password");
-	}
-	
+		
 	public Connection getConnection() {
 		return connection;
 	}
@@ -54,20 +42,40 @@ public class DBConnection extends HttpServlet {
 		
 		try {
 			String select = "SELECT * FROM Events where utoken = '" + user +"'";
+			System.out.println("SELECT * FROM Events where utoken = '" + user +"'");
 			ps = connection.prepareStatement(select);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Events event = new Events();
-				
-				
+								
 				event.setId(rs.getInt("id"));	
 				event.setUToken(rs.getString("utoken"));
 				event.setDate(rs.getTimestamp("date").toString());
 				event.setRecurringID(rs.getString("recurringID"));
+				event.setTitle(rs.getString("title"));
+				event.setURL(rs.getString("url"));
 				
 				ret.add(event);
 			}
 			rs.close();
+			ps.close();
+			connection.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	public boolean insertNewEvent(Events event){
+		PreparedStatement ps = null;
+		boolean ret = false;
+		try {
+			String select = String.format("INSERT INTO Events (utoken, date, title, url) VALUES (\'%s\', \'%s\', \'%s\', \'%s\');", 
+					event.getUToken(), event.getDate(), event.getTitle(), event.getURL());
+			ps = connection.prepareStatement(select);
+			ret = ps.execute();
+			
 			ps.close();
 			connection.close();
 		}

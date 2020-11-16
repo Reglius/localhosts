@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/test")
 public class test extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    
     public test() {
         super();
     }

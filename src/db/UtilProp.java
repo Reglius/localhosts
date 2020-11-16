@@ -16,7 +16,7 @@ public class UtilProp {
       
       prop.load(stream);
       if (prop.isEmpty()) {
-    	  System.out.println("dummy");
+    	  System.out.println("properties cannot be loaded");
       }
    }
 
