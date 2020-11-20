@@ -62,6 +62,7 @@ body {
 										id="datepicker" autocomplete="off" /> Start Time <input
 										type="time" class="form-control" id="StartTimeID"
 										name="startTime" autocomplete="off" />
+									Recurring Date<input type="checkbox" id="isSelected" aria-label="Checkbox for following text input">
 								</div>
 
 								<a id="SubmitID" href="#" class="btn btn-primary" type="submit">Submit</a>
@@ -115,7 +116,7 @@ var urlID      = $("#urlID").val();
 var StartTimeID =  $("#StartTimeID").val();
 var date = $( "#datepicker").val(); 
 var start = date + " " + StartTimeID + ":00";
-
+var  check = $("#isSelected").is(':checked');
 var xhttp = new XMLHttpRequest();
 xhttp.open("POST", 
 		"savedata?utoken=" + '<%=request.getParameter("userId")%>'
