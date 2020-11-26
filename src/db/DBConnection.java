@@ -69,9 +69,6 @@ public class DBConnection extends HttpServlet {
 				
 				ret.add(event);
 			}
-			rs.close();
-			ps.close();
-			connection.close();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -87,9 +84,6 @@ public class DBConnection extends HttpServlet {
 					event.getUToken(), event.getDate(), event.getTitle(), event.getURL());
 			ps = connection.prepareStatement(select);
 			ret = ps.execute();
-			
-			ps.close();
-			connection.close();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

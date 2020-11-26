@@ -25,7 +25,7 @@ public class DBConnectionTest {
 		connection.setConnection("jdbc:mysql://ec2-3-137-149-170.us-east-2.compute.amazonaws.com:3306/usethisone", "dbaccess", "Z@ckery2");
 		toInsert = new Events();
 		toInsert.setUToken("THISISONLYATEST");
-		toInsert.setTitle("Test Event");
+		toInsert.setTitle("Insert Test Event");
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 		toInsert.setDate(ts.toString());
 		toInsert.setURL("www.google.com");
@@ -60,6 +60,14 @@ public class DBConnectionTest {
 	
 	@Test
 	public void testInsertNewEvent() throws SQLException {
-		
+		connection.insertNewEvent(toInsert);
+		Events toCheck;
+		List<Events> eList = new ArrayList<Events>(connection.getAllEventsForUser("THISISONLYATEST"));
+		toCheck = eList.get(0);
+		assertEquals(toCheck.getUToken(), "THISISONLYATEST");
+		assertEquals(toCheck.getTitle(), "Insert Test Event");
+		assertEquals(toCheck.getURL(), "www.google.com");
+		PreparedStatement ps = connection.getConnection().prepareStatement("DELETE FROM Events WHERE utoken = 'THISISONLYATEST'");
+		ps.execute();
 	}
 }
