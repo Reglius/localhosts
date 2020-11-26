@@ -20,7 +20,19 @@ public class DBConnection extends HttpServlet {
 	
 	static Connection connection = null;
 	
-	public DBConnection(ServletContext context) {
+	public DBConnection() {
+	}
+		
+	public void setConnection(String url, String user, String password) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+			connection = DriverManager.getConnection(url, user, password);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void getConnectionByProperties(ServletContext context) {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			UtilProp.loadProperty(context);
@@ -31,7 +43,7 @@ public class DBConnection extends HttpServlet {
 			return;
 		}
 	}
-		
+	
 	public Connection getConnection() {
 		return connection;
 	}
