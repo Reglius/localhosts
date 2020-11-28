@@ -38,7 +38,8 @@ public class JSONRequest extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		db = new DBConnection(getServletContext());
+		db = new DBConnection();
+		db.getConnectionByProperties(getServletContext());
 		
 		String user = request.getParameter("userId");
 		

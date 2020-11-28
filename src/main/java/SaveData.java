@@ -36,7 +36,8 @@ public class SaveData extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		db = new DBConnection(getServletContext());
+		db = new DBConnection();
+		db.getConnectionByProperties(getServletContext());
 		
 		Events event = new Events();
 		event.setUToken(request.getParameter("utoken")); 
