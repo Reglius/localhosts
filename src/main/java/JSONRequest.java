@@ -93,47 +93,17 @@ public class JSONRequest extends HttpServlet {
 	        count++;
 		}
 		
-		List<String> datesToAdd = new ArrayList<>();
-		System.out.println("datesToAdd: " + datesToAdd.toString());
-		
 		for (Events event : recurringEvents) {
-			String [] startArr = event.getDate().split(" ")[0].split("-");
-			LocalDate startDate = new LocalDate(Integer.parseInt(startArr[0]), Integer.parseInt(startArr[1]), Integer.parseInt(startArr[2]));
-			
 			Recurring recurringFromEvent = recEvents.stream()
 					.filter(o -> o.getRecurId() == Integer.parseInt(event.getRecurringID())).findFirst().get();
 			
-			String [] endArr = recurringFromEvent.getEndDate().split("-");
-			LocalDate endDate = new LocalDate(Integer.parseInt(endArr[0]), Integer.parseInt(endArr[1]), Integer.parseInt(endArr[2]));
+			JSONArray currentWeekly = getWeeklyEvents(event, recurringFromEvent);
 			
-			for (int i = 0; i < 7; i++) {
-				startDate = new LocalDate(Integer.parseInt(startArr[0]), Integer.parseInt(startArr[1]), Integer.parseInt(startArr[2]));
-				
-				if (recurringFromEvent.getDays().toCharArray()[i] == '1') {
-					LocalDate currentDate = startDate.withDayOfWeek(WEEKDAYS[i]);
-					
-					if (startDate.isAfter(currentDate)) {
-					    startDate = currentDate.plusWeeks(1); // start on next instance
-					} else {
-					    startDate = currentDate; // start on current date
-					}
-						
-					while (startDate.isBefore(endDate)) {
-						datesToAdd.add(startDate.toString());
-						
-						JSONObject temp = new JSONObject();
-						temp.put("title", event.getTitle());
-						temp.put("url", event.getURL());
-						temp.put("start", startDate.toString() + " " + event.getDate().split(" ")[1]);
-				        ret.put(temp);
-					    
-				        startDate = startDate.plusWeeks(1);
-
-					}
-				}
-			}
+			for (int i = 0; i < currentWeekly.length(); i++) {
+				    ret.put(currentWeekly.get(i));
+			}			
 		}
-		System.out.println(datesToAdd.toString());
+		
         return ret;
 	}
 	
@@ -147,6 +117,43 @@ public class JSONRequest extends HttpServlet {
 		
         printWriter.append("var data = " + dummyData.toString());
 	}
+	
+	public JSONArray getWeeklyEvents(Events event, Recurring recurring) {
+		JSONArray ret = new JSONArray();
+		
+		String startArr[] = event.getDate().split(" ")[0].split("-");
+		String endArr[] = recurring.getEndDate().split("-");
+		
+		LocalDate startDate = new LocalDate(Integer.parseInt(startArr[0]), Integer.parseInt(startArr[1]), Integer.parseInt(startArr[2]));
+		LocalDate endDate = new LocalDate(Integer.parseInt(endArr[0]), Integer.parseInt(endArr[1]), Integer.parseInt(endArr[2]));
+
+		for (int i = 0; i < 7; i++) { //checks each date to see if it is on
+			startDate = new LocalDate(Integer.parseInt(startArr[0]), Integer.parseInt(startArr[1]), Integer.parseInt(startArr[2]));
+			
+			if (recurring.getDays().toCharArray()[i] == '1') {
+				LocalDate currentDate = startDate.withDayOfWeek(WEEKDAYS[i]);
+				
+				if (startDate.isAfter(currentDate)) {
+				    startDate = currentDate.plusWeeks(1); // start on next instance
+				} else {
+				    startDate = currentDate; // start on current date
+				}
+					
+				while (startDate.isBefore(endDate)) {
+					
+					JSONObject temp = new JSONObject();
+					temp.put("title", event.getTitle());
+					temp.put("url", event.getURL());
+					temp.put("start", startDate.toString() + " " + event.getDate().split(" ")[1]);
+			        ret.put(temp);
+				    
+			        startDate = startDate.plusWeeks(1);
+				}
+			}
+		}
+		return ret;
+	}
+
 
 }
 
