@@ -23,7 +23,7 @@
 <link href="static/jquery-ui/jquery-ui.css" rel="stylesheet">
 <script src="static/jquery-ui/external/jquery/jquery.js"></script>
 <script src="static/jquery-ui/jquery-ui.js"></script>
-<script	src="/localhosts/jsonrequest?userId=<%=request.getParameter("userId")%>"></script>
+<script src="/localhosts/jsonrequest?userId=<%=request.getParameter("userId")%>"></script>
 
 <style>
 body {
@@ -56,13 +56,21 @@ body {
 								<div class="form-group">
 									Event Name <input type="text" class="form-control"
 										id="EventNameID" name="EventName" aria-describedby="emailHelp"
-										autocomplete="off" /> URL <input type="text"
-										class="form-control" id="urlID" name="Date" autocomplete="off" />
-									Start Date <input type="text" class="form-control"
-										id="datepicker" autocomplete="off" /> Start Time <input
-										type="time" class="form-control" id="StartTimeID"
-										name="startTime" autocomplete="off" />
-									Recurring Date<input type="checkbox" id="isSelected" aria-label="Checkbox for following text input">
+										autocomplete="off" /> URL <input type="text" class="form-control" id="urlID" name="Date" autocomplete="off" />
+									Start Date <input type="date" id="datepicker" class="form-control"/>
+									Start Time <input type="time" class="form-control" id="StartTimeID"	name="startTime" autocomplete="off" /> 
+									<div>
+										Recurring Date?	<input type="checkbox" name="recurringcheck" id="grayout" class="recurring"> <br>
+										<input type="checkbox" id="sun" style="display:none;"><label for="sun" style="display:none;">&nbsp;Sunday </label>
+										<input type="checkbox" id="mon" style="display:none;"><label for="mon" style="display:none;">&nbsp;Monday </label>
+										<input type="checkbox" id="tue" style="display:none;"><label for="tue" style="display:none;">&nbsp;Tuesday </label>
+										<input type="checkbox" id="wed" style="display:none;"><label for="wed" style="display:none;">&nbsp;Wednesday </label> <br style="display:none;">
+										<input type="checkbox" id="thr" style="display:none;"><label for="thr" style="display:none;">&nbsp;Thursday </label>
+										<input type="checkbox" id="fri" style="display:none;"><label for="fri" style="display:none;">&nbsp;Friday </label>
+										<input type="checkbox" id="sat" style="display:none;"><label for="sat" style="display:none;">&nbsp;Saturday </label> <br style="display:none;">
+										<label for="enddate" style="display:none;">End Date: </label> <input type="date" id="enddate" style="display:none;" class="form-control"/> 
+										
+									</div>
 								</div>
 
 								<a id="SubmitID" href="#" class="btn btn-primary" type="submit">Submit</a>
@@ -79,17 +87,24 @@ body {
 	<div id="dialog" style="overflow-y: none;">
 		<h5>Event Name:</h5>
 		<div id="nameOfEvent"></div>
+		<h5>Event Time:</h5>
+		<div id="Time"></div>
 		<br>
 		<div id=link></div>
 		<br>
 	</div>
-	UTC Time:
-	<%
-		out.println((new java.util.Date()).toLocaleString());
-	%>
+	UTC Time: <%out.println((new java.util.Date()).toLocaleString());%>
 </body>
 </html>
 <script>
+$('#grayout').click(function() {
+//	$(this).siblings().attr('disabled', !this.checked);
+
+	$(this).siblings().attr("style", this.checked ? "" : "display:none;");
+//	}); 
+
+});
+
 $( document ).ready(function() { // this will auto hide the div for event UI when the DOM is ready to be loaded. 
   	$("#EventDiv").hide();
 	$("#dialog").hide();
@@ -101,103 +116,85 @@ $( "#add" ).on( "click", function() { // used when button is clicked to show  th
     $( "#EventDiv").show(); // shows the div for adding new events 
 });
 
-$( function() { // thisis for the date picker 
-    $("#datepicker").datepicker( 
-      {
-        dateFormat: 'yy-mm-dd', //formamt based on how the calader API works 
-      }
-    );
-});
+//$( function() { // thisis for the date picker 
+//    $("#datepicker").datepicker( 
+//      {
+//        dateFormat: 'yy-mm-dd', //formamt based on how the calader API works 
+//      }
+//    );
+//});
 
 $( "#SubmitID" ).on( "click", function(){ // this funtion adds new event to the data object 
-
-var eventName  =  $("#EventNameID").val();   // gets the input data
-var urlID      = $("#urlID").val();   
-var StartTimeID =  $("#StartTimeID").val();
-var date = $( "#datepicker").val(); 
-var start = date + " " + StartTimeID + ":00";
-var  check = $("#isSelected").is(':checked');
-var xhttp = new XMLHttpRequest();
-xhttp.open("POST", 
-		"savedata?utoken=" + '<%=request.getParameter("userId")%>'
-												+ "&date=" + start
-												+ "&title="	+ eventName
-												+ "&url=" + urlID
-												+ "&zone=" + Intl.DateTimeFormat().resolvedOptions().timeZone,true);
-						xhttp.send();
-
-						var newRec = {
-							start : start,
-							title : eventName,
-							url : urlID
-						}; // format for the rec 
-						data.push(newRec); // adds new json rec
-
-						$("#EventDiv").hide(); // hides the UI 
-
-						// logic below refreshes the new  events that were added 
-						var calendarEl = document.getElementById('calendar');
-						var calendar = new FullCalendar.Calendar(
-								calendarEl,
-								{
-									initialDate : start,
-									timeZone : 'UTC',
-									editable : true,
-									selectable : true,
-									businessHours : true,
-									dayMaxEvents : true, // allow "more" link when too many events
-									events : data,
-									eventClick : function(info) {
-										info.jsEvent.preventDefault(); // don't let the browser navigate
-
-										if (info.event.url) {
-											$('#nameOfEvent').html(
-													info.event.title);
-											$('#link')
-													.html(
-															'<a class="btn btn-outline-primary btn-sm"  href="' + info.event.url + ' ">Launch Meeting </a>');
-											$('#Time').html(info.event.start);
-											$("#dialog").dialog({
-												title : "Event Info",
-												width : 500
-											});
-										}
-									}
-								});
-
-						calendar.render();
-					});
-
-	function test() {
-		var calendarEl = document.getElementById('calendar');
-
-		var calendar = new FullCalendar.Calendar(
-				calendarEl,
-				{
-					initialDate : new Date(),
-					timeZone : 'UTC',
-					editable : true,
-					selectable : true,
-					businessHours : true,
-					dayMaxEvents : true, // allow "more" link when too many events
-					events : data,
-					eventClick : function(info) {
-						info.jsEvent.preventDefault(); // don't let the browser navigate
-
-						if (info.event.url) {
-							$('#nameOfEvent').html(info.event.title);
-							$('#link')
-									.html(
-											'<a class="btn btn-outline-primary btn-sm"  href="' + info.event.url + ' ">Launch Meeting </a>');
-							$('#Time').html(info.event.start);
-							$("#dialog").dialog({
-								title : "Event Info",
-								width : 500
-							});
-						}
-					}
-				});
-
-		calendar.render();
+	
+	var eventName = $("#EventNameID").val();   // gets the input data
+	var urlID = $("#urlID").val();   
+	var StartTimeID = $("#StartTimeID").val();
+	var date = $( "#datepicker").val(); 
+	var start = date + " " + StartTimeID + ":00";
+	var check = $("#isSelected").is(':checked');
+	var binaryWeekly = "";
+	var enddate = $("#enddate").val();
+	
+	if (document.getElementsByName("recurringcheck")[0].checked) {
+	    binaryWeekly += document.getElementById('sun').checked ? 1 : 0;
+	    binaryWeekly += document.getElementById('mon').checked ? 1 : 0;
+	    binaryWeekly += document.getElementById('tue').checked ? 1 : 0;
+	    binaryWeekly += document.getElementById('wed').checked ? 1 : 0;
+	    binaryWeekly += document.getElementById('thr').checked ? 1 : 0;
+	    binaryWeekly += document.getElementById('fri').checked ? 1 : 0;
+	    binaryWeekly += document.getElementById('sat').checked ? 1 : 0;
+	} else {
+		binaryWeekly = "0000000";
 	}
+	var xhttp = new XMLHttpRequest();
+	xhttp.open("POST", 
+			"savedata?utoken=" + '<%=request.getParameter("userId")%>'
+					+ "&date="
+					+ start
+					+ "&title="
+					+ eventName
+					+ "&url="
+					+ urlID
+					+ "&zone="
+					+ Intl.DateTimeFormat()
+							.resolvedOptions().timeZone
+					+ "&recurring="
+					+ binaryWeekly
+					+ "$" + enddate, true);
+	xhttp.send();
+	location.reload();
+});
+
+function test() {
+	var calendarEl = document.getElementById('calendar');
+
+	var calendar = new FullCalendar.Calendar(
+			calendarEl,
+			{
+				initialDate : new Date(),
+				timeZone : 'local',
+				editable : true,
+				selectable : true,
+				businessHours : true,
+				dayMaxEvents : true, // allow "more" link when too many events
+				events : data,
+				eventClick : function(info) {
+					info.jsEvent.preventDefault(); // don't let the browser navigate
+
+					if (info.event.url) {
+						$('#nameOfEvent').html(info.event.title);
+						$('#link')
+								.html(
+										'<a class="btn btn-outline-primary btn-sm"  href="' + info.event.url + ' ">Launch Meeting </a>');
+						$('#Time').html(info.event.start);
+						$("#dialog").dialog({
+							title : "Event Info",
+							width : 500
+						});
+					}
+				}
+			});
+
+	calendar.render();
+}
 </script>

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import db.DBConnection;
 import db.Events;
+import db.Recurring;
 
 /**
  * Servlet implementation class SaveData
@@ -37,13 +38,31 @@ public class SaveData extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		db = new DBConnection();
-		db.getConnectionByProperties(getServletContext());
-		
+		db.setConnectionByProperties(getServletContext());
+
+		//these all should have some value
+		String utoken = request.getParameter("utoken");
+		String title = request.getParameter("title");
+		String url = request.getParameter("url");
+		String date = request.getParameter("date");
+		//these might not have a value
+        String recurringInput = request.getParameter("recurring");
+        String[] recurrInfo = recurringInput.split("$");
+        
 		Events event = new Events();
-		event.setUToken(request.getParameter("utoken")); 
-		event.setTitle(request.getParameter("title"));
-		event.setURL(request.getParameter("url"));
-        event.setDate(request.getParameter("date"));
+
+        if(recurrInfo.length == 2) {
+        	Recurring recur = new Recurring();
+        	recur.setUToken(utoken);
+        	recur.setDays(recurrInfo[0]);
+        	recur.setEndDate(recurrInfo[1]);
+        	
+        }
+        
+		event.setUToken(utoken); 
+		event.setTitle(title);
+		event.setURL(url);
+        event.setDate(date);
         
         db.insertNewEvent(event);
 		

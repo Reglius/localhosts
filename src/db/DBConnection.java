@@ -32,7 +32,7 @@ public class DBConnection extends HttpServlet {
 		}
 	}
 	
-	public void getConnectionByProperties(ServletContext context) {
+	public void setConnectionByProperties(ServletContext context) {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			UtilProp.loadProperty(context);
@@ -54,7 +54,6 @@ public class DBConnection extends HttpServlet {
 		
 		try {
 			String select = "SELECT * FROM Events where utoken = '" + user +"'";
-			System.out.println("SELECT * FROM Events where utoken = '" + user +"'");
 			ps = connection.prepareStatement(select);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -68,6 +67,30 @@ public class DBConnection extends HttpServlet {
 				event.setURL(rs.getString("url"));
 				
 				ret.add(event);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	public List<Recurring> getAllRecurringForUser(String user){
+		List<Recurring> ret = new ArrayList<>();
+		PreparedStatement ps = null;
+		
+		try {
+			String select = "SELECT * FROM recurring where utoken = '" + user +"'";
+			ps = connection.prepareStatement(select);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Recurring rec = new Recurring();
+				rec.setRecurId(rs.getInt("recurringID"));
+				rec.setUToken(rs.getString("utoken"));
+				rec.setDays(rs.getString("days"));
+				rec.setEndDate(rs.getString("endDate"));
+				
+				ret.add(rec);
 			}
 		}
 		catch (Exception e) {

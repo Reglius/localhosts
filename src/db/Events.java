@@ -66,6 +66,6 @@ public class Events {
 	   
 	   @Override
 	   public String toString() {
-		   return String.format("%s, %s, %s, %s, %s, %s", id, utoken, date,recurringID, title, url);
+		   return String.format("%s, %s, %s, %s, %s, %s", id, utoken, date, title, url, recurringID);
 	   }
 	}

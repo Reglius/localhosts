@@ -1,26 +1,25 @@
 package db;
 
 public class Recurring {
-	String recurId;
+	int recurId;
 	String utoken;
 	String endDate; //ending date in the format YYYY-mm-dd
-	String days; //"Monday" "Tuesday" "Wednesday" ...
+	String days; //1000000 for only sunday 1100000 for sunday and monday...
 	
    public Recurring() {}
    
-   public Recurring(String recurId, String utoken, String endDate, String days) {
+   public Recurring(int recurId, String utoken, String endDate, String days) {
       this.recurId = recurId;
       this.utoken = utoken;
       this.endDate = endDate;
       this.days = days;
    }
-	   
    
-   public String getRecurId() {
+   public int getRecurId() {
 	   return recurId;
    }
    
-   public void setRecurId(String recurId) {
+   public void setRecurId(int recurId) {
 	   this.recurId = recurId;
    }
    

@@ -3,7 +3,9 @@ package main.java;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -12,11 +14,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import db.DBConnection;
 import db.Events;
+import db.Recurring;
 
 /**
  * Servlet implementation class Home
@@ -24,7 +29,7 @@ import db.Events;
 @WebServlet(urlPatterns = {"/jsonrequest"})
 public class JSONRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    
+	private static final int[] WEEKDAYS = new int[]{7,1,2,3,4,5,6};
 	private DBConnection db;
 	int count = 0;
     /**
@@ -39,9 +44,10 @@ public class JSONRequest extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		db = new DBConnection();
-		db.getConnectionByProperties(getServletContext());
-		
-		String user = request.getParameter("userId");
+		db.setConnectionByProperties(getServletContext());
+
+		String user = request.getParameter("userId");		
+		System.out.println("user" + user);
 		
 		if (user == null || user.equals("null")) {
 			printDummyData(response.getWriter());
@@ -49,7 +55,7 @@ public class JSONRequest extends HttpServlet {
 		}
 		
 		JSONArray array = getArray(user);
-
+		
 		response.setContentType("application/javascript");
 		
 		if (count > 0) {	
@@ -67,19 +73,67 @@ public class JSONRequest extends HttpServlet {
 	}
 	
 	private JSONArray getArray(String user) {
-		
 		JSONArray ret = new JSONArray();
+		List<Events> events = db.getAllEventsForUser(user);
+		List<Events> recurringEvents = new ArrayList<>();
+		List<Recurring> recEvents = db.getAllRecurringForUser(user);
 		count = 0;
 		
-		for (Events event : db.getAllEventsForUser(user)) {
-			count++;
+		for (Events event : events) {
+			if(!event.getRecurringID().equals("NULL")) {
+				recurringEvents.add(event);
+			}
+			
 			JSONObject temp = new JSONObject();
 			temp.put("title", event.getTitle());
 			temp.put("url", event.getURL());
 			temp.put("start", event.getDate());
 	        ret.put(temp);
+	        
+	        count++;
 		}
-		        
+		
+		List<String> datesToAdd = new ArrayList<>();
+		System.out.println("datesToAdd: " + datesToAdd.toString());
+		
+		for (Events event : recurringEvents) {
+			String [] startArr = event.getDate().split(" ")[0].split("-");
+			LocalDate startDate = new LocalDate(Integer.parseInt(startArr[0]), Integer.parseInt(startArr[1]), Integer.parseInt(startArr[2]));
+			
+			Recurring recurringFromEvent = recEvents.stream()
+					.filter(o -> o.getRecurId() == Integer.parseInt(event.getRecurringID())).findFirst().get();
+			
+			String [] endArr = recurringFromEvent.getEndDate().split("-");
+			LocalDate endDate = new LocalDate(Integer.parseInt(endArr[0]), Integer.parseInt(endArr[1]), Integer.parseInt(endArr[2]));
+			
+			for (int i = 0; i < 7; i++) {
+				startDate = new LocalDate(Integer.parseInt(startArr[0]), Integer.parseInt(startArr[1]), Integer.parseInt(startArr[2]));
+				
+				if (recurringFromEvent.getDays().toCharArray()[i] == '1') {
+					LocalDate currentDate = startDate.withDayOfWeek(WEEKDAYS[i]);
+					
+					if (startDate.isAfter(currentDate)) {
+					    startDate = currentDate.plusWeeks(1); // start on next instance
+					} else {
+					    startDate = currentDate; // start on current date
+					}
+						
+					while (startDate.isBefore(endDate)) {
+						datesToAdd.add(startDate.toString());
+						
+						JSONObject temp = new JSONObject();
+						temp.put("title", event.getTitle());
+						temp.put("url", event.getURL());
+						temp.put("start", startDate.toString() + " " + event.getDate().split(" ")[1]);
+				        ret.put(temp);
+					    
+				        startDate = startDate.plusWeeks(1);
+
+					}
+				}
+			}
+		}
+		System.out.println(datesToAdd.toString());
         return ret;
 	}
 	
