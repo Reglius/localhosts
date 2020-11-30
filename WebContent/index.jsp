@@ -188,6 +188,7 @@ function test() {
 			{
 				initialDate : new Date(),
 				timeZone : 'local',
+				nextDayThreshold: '12:00:00',
 				editable : true,
 				selectable : true,
 				businessHours : true,
