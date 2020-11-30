@@ -40,6 +40,14 @@ body {
 </style>
 </head>
 <body>
+	
+	<div class="alert alert-danger alert-dismissible fade show text-center" role="alert" id="error">
+	  <strong>Holy guacamole!</strong> You should fill in the event fields below!
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+
 	<div class="container-fluid">
 		<div class="row justify-content-md-center">
 			<div class="col">
@@ -106,7 +114,8 @@ $('#grayout').click(function() {
 });
 
 $( document ).ready(function() { // this will auto hide the div for event UI when the DOM is ready to be loaded. 
-  	$("#EventDiv").hide();
+	$("#error").hide();
+	$("#EventDiv").hide();
 	$("#dialog").hide();
 	test();
 	
@@ -135,34 +144,40 @@ $( "#SubmitID" ).on( "click", function(){ // this funtion adds new event to the 
 	var binaryWeekly = "";
 	var enddate = $("#enddate").val();
 	
-	if (document.getElementsByName("recurringcheck")[0].checked) {
-	    binaryWeekly += document.getElementById('sun').checked ? 1 : 0;
-	    binaryWeekly += document.getElementById('mon').checked ? 1 : 0;
-	    binaryWeekly += document.getElementById('tue').checked ? 1 : 0;
-	    binaryWeekly += document.getElementById('wed').checked ? 1 : 0;
-	    binaryWeekly += document.getElementById('thr').checked ? 1 : 0;
-	    binaryWeekly += document.getElementById('fri').checked ? 1 : 0;
-	    binaryWeekly += document.getElementById('sat').checked ? 1 : 0;
+	if(eventName == '' || urlID == ''  || StartTimeID == '' ||  date == '' || start == '' ) 
+	{
+		$( "#error").show();
 	} else {
-		binaryWeekly = "0000000";
+	   
+		if (document.getElementsByName("recurringcheck")[0].checked) {
+		    binaryWeekly += document.getElementById('sun').checked ? 1 : 0;
+		    binaryWeekly += document.getElementById('mon').checked ? 1 : 0;
+		    binaryWeekly += document.getElementById('tue').checked ? 1 : 0;
+		    binaryWeekly += document.getElementById('wed').checked ? 1 : 0;
+		    binaryWeekly += document.getElementById('thr').checked ? 1 : 0;
+		    binaryWeekly += document.getElementById('fri').checked ? 1 : 0;
+		    binaryWeekly += document.getElementById('sat').checked ? 1 : 0;
+		} else {
+			binaryWeekly = "0000000";
+		}
+		var xhttp = new XMLHttpRequest();
+		xhttp.open("POST", 
+				"savedata?utoken=" + '<%=request.getParameter("userId")%>'
+						+ "&date="
+						+ start
+						+ "&title="
+						+ eventName
+						+ "&url="
+						+ urlID
+						+ "&zone="
+						+ Intl.DateTimeFormat()
+								.resolvedOptions().timeZone
+						+ "&recurring="
+						+ binaryWeekly
+						+ "z" + enddate, true);
+		xhttp.send();
+		setTimeout(   function() { location.reload(); }, 1000);
 	}
-	var xhttp = new XMLHttpRequest();
-	xhttp.open("POST", 
-			"savedata?utoken=" + '<%=request.getParameter("userId")%>'
-					+ "&date="
-					+ start
-					+ "&title="
-					+ eventName
-					+ "&url="
-					+ urlID
-					+ "&zone="
-					+ Intl.DateTimeFormat()
-							.resolvedOptions().timeZone
-					+ "&recurring="
-					+ binaryWeekly
-					+ "$" + enddate, true);
-	xhttp.send();
-	location.reload();
 });
 
 function test() {

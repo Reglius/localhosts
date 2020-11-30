@@ -80,7 +80,7 @@ public class JSONRequest extends HttpServlet {
 		count = 0;
 		
 		for (Events event : events) {
-			if(!event.getRecurringID().equals("NULL")) {
+			if(!(event.getRecurringID() == null) && !event.getRecurringID().equals("NULL")) {
 				recurringEvents.add(event);
 			}
 			

@@ -103,8 +103,51 @@ public class DBConnection extends HttpServlet {
 		PreparedStatement ps = null;
 		boolean ret = false;
 		try {
-			String select = String.format("INSERT INTO Events (utoken, date, title, url) VALUES (\'%s\', \'%s\', \'%s\', \'%s\');", 
-					event.getUToken(), event.getDate(), event.getTitle(), event.getURL());
+			String select = "";
+			if (event.getRecurringID() == null) {
+				select = String.format("INSERT INTO Events (utoken, date, title, url) VALUES (\'%s\', \'%s\', \'%s\', \'%s\');", 
+						event.getUToken(), event.getDate(), event.getTitle(), event.getURL());
+			} else {
+			select = String.format("INSERT INTO Events (utoken, date, title, url, recurringID) VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\');", 
+					event.getUToken(), event.getDate(), event.getTitle(), event.getURL(), event.getRecurringID());
+			}
+			
+			ps = connection.prepareStatement(select);
+			ret = ps.execute();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	public String getRecurringEventId(Recurring in){
+		PreparedStatement ps = null;
+		
+		try {
+			String select = "SELECT * FROM recurring where utoken = '" + in.getUToken() 
+				+ "' && endDate = '" + in.getEndDate() 
+				+ "' && days = '" + in.getDays() + "'";
+			
+			ps = connection.prepareStatement(select);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				return rs.getString("recurringID");
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "-1";
+	}
+	
+	public boolean insertNewRecurring(Recurring rec){
+		PreparedStatement ps = null;
+		boolean ret = false;
+		try {
+			String select = String.format("INSERT INTO recurring (utoken, endDate, days) VALUES (\'%s\', \'%s\', \'%s\');", 
+					rec.getUToken(), rec.getEndDate(), rec.getDays());
 			ps = connection.prepareStatement(select);
 			ret = ps.execute();
 		}
