@@ -73,6 +73,8 @@ public class JSONRequest extends HttpServlet {
 	}
 	
 	private JSONArray getArray(String user) {
+		db = new DBConnection();
+		db.setConnectionByProperties(getServletContext());
 		JSONArray ret = new JSONArray();
 		List<Events> events = db.getAllEventsForUser(user);
 		List<Events> recurringEvents = new ArrayList<>();
@@ -119,6 +121,8 @@ public class JSONRequest extends HttpServlet {
 	}
 	
 	public JSONArray getWeeklyEvents(Events event, Recurring recurring) {
+		db = new DBConnection();
+		db.setConnectionByProperties(getServletContext());
 		JSONArray ret = new JSONArray();
 		
 		String startArr[] = event.getDate().split(" ")[0].split("-");
