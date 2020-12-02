@@ -64,7 +64,7 @@ public class SaveData extends HttpServlet {
             db.insertNewRecurring(recur);
             event.setRecurringID(db.getRecurringEventId(recur));
         }
-		
+        
 		event.setUToken(utoken); 
 		event.setTitle(title);
 		event.setURL(url);
