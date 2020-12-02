@@ -68,6 +68,9 @@ public class DBConnection extends HttpServlet {
 				
 				ret.add(event);
 			}
+			rs.close();
+			ps.close();
+			connection.close();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -92,6 +95,9 @@ public class DBConnection extends HttpServlet {
 				
 				ret.add(rec);
 			}
+			ps.close();
+			rs.close();
+			connection.close();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,6 +120,8 @@ public class DBConnection extends HttpServlet {
 			
 			ps = connection.prepareStatement(select);
 			ret = ps.execute();
+			ps.close();
+			connection.close();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -135,6 +143,9 @@ public class DBConnection extends HttpServlet {
 			while (rs.next()) {
 				return rs.getString("recurringID");
 			}
+			ps.close();
+			rs.close();
+			connection.close();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -150,6 +161,8 @@ public class DBConnection extends HttpServlet {
 					rec.getUToken(), rec.getEndDate(), rec.getDays());
 			ps = connection.prepareStatement(select);
 			ret = ps.execute();
+			ps.close();
+			connection.close();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
