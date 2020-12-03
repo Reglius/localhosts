@@ -1,4 +1,5 @@
 package tests;
+
 import org.junit.Before;
 import org.junit.Test;
 import db.DBConnection;
@@ -21,7 +22,8 @@ public class TestGetAllEventsForUser {
 	@Before
 	public void setUp() {
 		connection = new DBConnection();
-		connection.setConnection("jdbc:mysql://ec2-3-137-149-170.us-east-2.compute.amazonaws.com:3306/usethisone", "dbaccess", "Z@ckery2");
+		connection.setConnection("jdbc:mysql://ec2-3-137-149-170.us-east-2.compute.amazonaws.com:3306/usethisone",
+				"dbaccess", "Z@ckery2");
 	}
 
 	@Test
@@ -43,7 +45,7 @@ public class TestGetAllEventsForUser {
 		assertEquals("2020-11-25 22:41:05.0", toCheck.getDate());
 		assertEquals("Test Event 3", toCheck.getTitle());
 		assertEquals("www.google.com", toCheck.getURL());
-		toCheck=eList.get(3);
+		toCheck = eList.get(3);
 		assertEquals("selectAllTest", toCheck.getUToken());
 		assertEquals("2020-11-28 20:28:09.0", toCheck.getDate());
 		assertEquals("Test Recurring Event", toCheck.getTitle());

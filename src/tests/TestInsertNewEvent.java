@@ -17,11 +17,12 @@ public class TestInsertNewEvent {
 
 	private DBConnection connection;
 	private Events toInsert;
-	
+
 	@Before
 	public void setUp() {
 		connection = new DBConnection();
-		connection.setConnection("jdbc:mysql://ec2-3-137-149-170.us-east-2.compute.amazonaws.com:3306/usethisone", "dbaccess", "Z@ckery2");
+		connection.setConnection("jdbc:mysql://ec2-3-137-149-170.us-east-2.compute.amazonaws.com:3306/usethisone",
+				"dbaccess", "Z@ckery2");
 		toInsert = new Events();
 		toInsert.setUToken("THISISONLYATEST");
 		toInsert.setTitle("Test Event");
@@ -30,7 +31,7 @@ public class TestInsertNewEvent {
 		toInsert.setDate(ts.toString());
 		toInsert.setURL("www.google.com");
 	}
-	
+
 	@Test
 	public void testInsertNewEvent() throws SQLException {
 
@@ -41,7 +42,8 @@ public class TestInsertNewEvent {
 		assertEquals(toCheck.getUToken(), "THISISONLYATEST");
 		assertEquals(toCheck.getTitle(), "Insert Test Event");
 		assertEquals(toCheck.getURL(), "www.google.com");
-		PreparedStatement ps = connection.getConnection().prepareStatement("DELETE FROM Events WHERE utoken = 'THISISONLYATEST'");
+		PreparedStatement ps = connection.getConnection()
+				.prepareStatement("DELETE FROM Events WHERE utoken = 'THISISONLYATEST'");
 		ps.execute();
 	}
 }

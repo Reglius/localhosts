@@ -1,16 +1,20 @@
 package tests;
 
-import java.util.regex.Pattern;
-import java.util.concurrent.TimeUnit;
-import org.junit.*;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
+import static org.junit.Assert.fail;
 
-public class TestTodayButton {
+import java.util.concurrent.TimeUnit;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class TestChangeMonthButton {
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -21,11 +25,11 @@ public class TestTodayButton {
 		System.setProperty("webdriver.chrome.driver", "C:\\school\\chromedriver.exe");
 		driver = new ChromeDriver();
 		baseUrl = "https://www.google.com/";
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(120, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testTodayButton() throws Exception {
+	public void testLogin() throws Exception {
 		driver.get("http://ec2-3-137-149-170.us-east-2.compute.amazonaws.com:5000/users/login");
 		Thread.sleep(2000);
 		driver.findElement(By.id("email")).sendKeys("testing@test.com");
@@ -36,7 +40,7 @@ public class TestTodayButton {
 		Thread.sleep(2000);
 		driver.findElement(By.xpath("//div[@id='calendar']/div/div[3]/div/button[2]/span")).click();
 		Thread.sleep(2000);
-		driver.findElement(By.xpath("(//button[@type='button'])[3]")).click();
+		driver.findElement(By.xpath("(//button[@type='button'])[4]")).click();
 		Thread.sleep(2000);
 	}
 
