@@ -54,13 +54,11 @@ public class TestNewInvalidEvent {
 		Thread.sleep(1000);
 		driver.findElement(By.id("StartTimeID")).sendKeys("14:00");
 		Thread.sleep(1000);
-		driver.findElement(By.id("urlID")).clear();
+		driver.findElement(By.id("StartTimeID")).clear();
 		Thread.sleep(1000);
 		driver.findElement(By.id("SubmitID")).click();
 		Thread.sleep(1000);
 		driver.findElement(By.id("grayout")).click();
-		Thread.sleep(1000);
-		driver.findElement(By.id("urlID")).sendKeys("http://www.google.com");
 		Thread.sleep(1000);
 		driver.findElement(By.id("SubmitID")).click();
 		Thread.sleep(1000);
