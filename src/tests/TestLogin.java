@@ -27,13 +27,13 @@ public class TestLogin {
 	@Test
 	public void testLogin() throws Exception {
 		driver.get("http://ec2-3-137-149-170.us-east-2.compute.amazonaws.com:5000/users/login");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("email")).sendKeys("testing@test.com");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("password")).sendKeys("testing");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 	}
 
 	@After

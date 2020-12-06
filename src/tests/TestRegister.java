@@ -27,27 +27,27 @@ public class TestRegister {
 	@Test
 	public void testRegister() throws Exception {
 		driver.get("http://ec2-3-137-149-170.us-east-2.compute.amazonaws.com:5000/users/register");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("name")).sendKeys("Test Tester");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		// NOTE: This email will have to change with any more than one run of this test
 		// being executed
 		// At the time of pushing, this email is valid for one test
-		driver.findElement(By.id("email")).sendKeys("testing3@testing.com");
-		Thread.sleep(2000);
+		driver.findElement(By.id("email")).sendKeys("testing10@testing.com");
+		Thread.sleep(1000);
 		driver.findElement(By.id("password")).sendKeys("testing");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("password2")).sendKeys("testing");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		// NOTE: This email needs to coincide with the email above
-		driver.findElement(By.id("email")).sendKeys("testing3@testing.com");
-		Thread.sleep(2000);
+		driver.findElement(By.id("email")).sendKeys("testing10@testing.com");
+		Thread.sleep(1000);
 		driver.findElement(By.id("password")).sendKeys("testing");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 	}
 
 	@After

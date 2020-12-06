@@ -27,23 +27,23 @@ public class TestOpenEvent {
 	@Test
 	public void testOpenEvent() throws Exception {
 		driver.get("http://ec2-3-137-149-170.us-east-2.compute.amazonaws.com:5000/users/login");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.manage().window().maximize();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("email")).sendKeys("testing@test.com");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("password")).sendKeys("testing");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		// NOTE: This xpath may need to change if the create event tests have not been
 		// run yet so as to provide the test an actual meeting to open
 		driver.findElement(By.xpath(
 				"//div[@id='calendar']/div[2]/div/table/tbody/tr/td/div/div/div/table/tbody/tr[4]/td[2]/div/div[2]/div/a/div[3]"))
 				.click();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.linkText("Launch Meeting")).click();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 	}
 
 	@After

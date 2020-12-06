@@ -27,17 +27,17 @@ public class TestTodayButton {
 	@Test
 	public void testTodayButton() throws Exception {
 		driver.get("http://ec2-3-137-149-170.us-east-2.compute.amazonaws.com:5000/users/login");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("email")).sendKeys("testing@test.com");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("password")).sendKeys("testing");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.xpath("//div[@id='calendar']/div/div[3]/div/button[2]/span")).click();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.xpath("(//button[@type='button'])[3]")).click();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 	}
 
 	@After

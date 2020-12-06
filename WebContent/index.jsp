@@ -144,6 +144,10 @@ $( "#SubmitID" ).on( "click", function(){ // this funtion adds new event to the 
 	var binaryWeekly = "";
 	var enddate = $("#enddate").val();
 	
+	if (!urlID.includes("http://") && !urlID.includes("https://")) {
+		urlID = "http://" + urlID;
+	}
+	
 	if(eventName == '' || urlID == ''  || StartTimeID == '' ||  date == '' || start == '' ) 
 	{
 		$( "#error").show();

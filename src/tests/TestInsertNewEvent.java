@@ -42,8 +42,8 @@ public class TestInsertNewEvent {
 		assertEquals(toCheck.getUToken(), "THISISONLYATEST");
 		assertEquals(toCheck.getTitle(), "Insert Test Event");
 		assertEquals(toCheck.getURL(), "www.google.com");
-		PreparedStatement ps = connection.getConnection()
-				.prepareStatement("DELETE FROM Events WHERE utoken = 'THISISONLYATEST'");
-		ps.execute();
+		//PreparedStatement ps = connection.getConnection()
+				//.prepareStatement("DELETE FROM Events WHERE utoken = 'THISISONLYATEST'");
+		//ps.execute();
 	}
 }

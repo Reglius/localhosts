@@ -27,25 +27,25 @@ public class TestNewValidRegEvent {
 	@Test
 	public void testNewRegEvent() throws Exception {
 		driver.get("http://ec2-3-137-149-170.us-east-2.compute.amazonaws.com:5000/users/login");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("email")).sendKeys("testing@test.com");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("password")).sendKeys("testing");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("add")).click();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("EventNameID")).sendKeys("Automated Test Event");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("urlID")).sendKeys("http://www.google.com");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("datepicker")).sendKeys("12-20-2020");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("StartTimeID")).sendKeys("14:00");
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		driver.findElement(By.id("SubmitID")).click();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 	}
 
 	@After
