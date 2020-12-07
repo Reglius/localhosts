@@ -156,4 +156,90 @@ public class DBConnection extends HttpServlet {
 		}
 		return ret;
 	}
+	
+	public Events getEventFromShareId(String id) {
+		PreparedStatement ps = null;
+				
+		try {
+			String select = "SELECT * FROM Events where id = '" + id + "'";
+			
+			ps = connection.prepareStatement(select);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				Events event = new Events();
+				
+				event.setId(rs.getInt("id"));	
+				event.setUToken(rs.getString("utoken"));
+				event.setDate(rs.getTimestamp("date").toString());
+				event.setRecurringID(rs.getString("recurringID"));
+				event.setTitle(rs.getString("title"));
+				event.setURL(rs.getString("url"));
+				
+				return event;
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Recurring getRecurringFromRecurringId(String id) {
+		PreparedStatement ps = null;
+				
+		try {
+			String select = "SELECT * FROM recurring where recurringId = '" + id + "'";
+			
+			ps = connection.prepareStatement(select);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				Recurring rec = new Recurring();
+				
+				rec.setRecurId(rs.getInt("recurringID"));
+				rec.setUToken(rs.getString("utoken"));
+				rec.setDays(rs.getString("days"));
+				rec.setEndDate(rs.getString("endDate"));
+				
+				return rec;
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public boolean deleteEventById(String id) {
+		PreparedStatement ps = null;
+				
+		try {
+			String select = "delete from Events where id = '" + id + "'";
+			
+			ps = connection.prepareStatement(select);
+			return ps.execute();
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean deleteRecurringById(String id) {
+		PreparedStatement ps = null;
+				
+		try {
+			String select = "delete from recurring where recurringID = '" + id + "'";
+			
+			ps = connection.prepareStatement(select);
+			return ps.execute();
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

@@ -2,8 +2,11 @@ package main.java;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -88,6 +91,7 @@ public class JSONRequest extends HttpServlet {
 			temp.put("title", event.getTitle());
 			temp.put("url", event.getURL());
 			temp.put("start", event.getDate());
+			temp.put("id", event.getId());
 	        ret.put(temp);
 	        
 	        count++;
@@ -110,9 +114,11 @@ public class JSONRequest extends HttpServlet {
 	private void printDummyData(PrintWriter printWriter) {
 		JSONArray dummyData = new JSONArray();
 		JSONObject dataSet = new JSONObject();
-        dataSet.put("title", "this is a demo"); //when titles are too long then they are going over calendar boarder
+        dataSet.put("title", "DEMO EVENT"); //when titles are too long then they are going over calendar boarder
         dataSet.put("url", "https://www.zoom.us/");
-        dataSet.put("start", "2020-11-15 01:00:00");
+        Date d = new Date();
+        dataSet.put("start", String.format("2020-%tm-15 01:00:00", d));
+        dataSet.put("id", 0);
         dummyData.put(dataSet);
 		
         printWriter.append("var data = " + dummyData.toString());
@@ -145,6 +151,7 @@ public class JSONRequest extends HttpServlet {
 					temp.put("title", event.getTitle());
 					temp.put("url", event.getURL());
 					temp.put("start", startDate.toString() + " " + event.getDate().split(" ")[1]);
+					temp.put("id", event.getId());
 			        ret.put(temp);
 				    
 			        startDate = startDate.plusWeeks(1);

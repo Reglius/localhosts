@@ -51,9 +51,7 @@ body {
 	<div class="container-fluid">
 		<div class="row justify-content-md-center">
 			<div class="col">
-				<button type="button" id="add" class="btn btn-primary btn-lg ">
-					<span class="ui-icon ui-icon-plus"> </span>New Event
-				</button>
+				<button type="button" id="add" class="btn btn-primary btn-lg "> New Event </button>
 				<div id="EventDiv" class="pt-5">
 					<div class="card" style="width: 26rem;">
 						<div class="card-header">New Event</div>
@@ -85,6 +83,17 @@ body {
 							</form>
 						</div>
 					</div>
+				
+				<div class="card mt-5" style="width: 26rem;">
+					<div class="card-header">Enter A Share Code</div>
+						<div class="card-body">
+						<div class="form-group">
+							<input type="text" id="shareCodeId" class="form-control"/> 
+						</div>
+						<a id="ShareCodeSubmit" href="#" class="btn btn-primary" type="submit">Add Share Code</a>
+						
+					</div>
+				</div>
 				</div>
 			</div>
 			<div class="col-9">
@@ -93,18 +102,38 @@ body {
 		</div>
 	</div>
 	<div id="dialog" style="overflow-y: none;">
-		<h5>Event Name:</h5>
-		<div id="nameOfEvent"></div>
-		<h5>Event Time:</h5>
-		<div id="Time"></div>
-		<br>
-		<div id=link></div>
-		<br>
+		<div id="infostuff">
+			<h5>Event Name:</h5>
+			<div id="nameOfEvent"></div>
+			<h5>Event Time:</h5>
+			<div id="Time"></div>
+			<br>
+			<div id="link"></div>
+			<br>
+			<span>Click to copy share id onto clipboard: </span> 
+			<button id="ShareCode" onclick="copyToClipboard('#ShareCode')" class="btn btn-outline-primary btn-sm" style="width:100px"></button>
+			<button id="DeleteEvent" class="btn btn-outline-danger btn-sm ml-3" style="width:100px">Delete Event</button>
+			
+		</div>
+		<div id="DeleteAlert"> Are you sure you want to delete?
+			<button id="DeleteNah" class="btn btn-outline-primary btn-sm" style="width:100px">Cancel</button>
+			<button id="DeleteYea" class="btn btn-outline-danger btn-sm ml-3" style="width:100px">Confirm</button>
+		</div>
+				
 	</div>
 	UTC Time: <%out.println((new java.util.Date()).toLocaleString());%>
 </body>
 </html>
 <script>
+
+function copyToClipboard(element) {   
+	var $temp = $("<input>");   
+	$("body").append($temp);   
+	$temp.val($(element).text()).select();   
+	document.execCommand("copy");   
+	$temp.remove(); 
+}
+
 $('#grayout').click(function() {
 //	$(this).siblings().attr('disabled', !this.checked);
 
@@ -117,12 +146,24 @@ $( document ).ready(function() { // this will auto hide the div for event UI whe
 	$("#error").hide();
 	$("#EventDiv").hide();
 	$("#dialog").hide();
+	$("#DeleteAlert").hide();
 	test();
 	
 });
 
-$( "#add" ).on( "click", function() { // used when button is clicked to show  the add event UI 
-    $( "#EventDiv").show(); // shows the div for adding new events 
+$( "#add" ).on( "click", function() { // used when button is clicked to show  the add event UI
+	
+	var check = $("#add").text().trim();
+	
+	if(check == "New Event") {
+    	$( "#EventDiv").show(); // shows the div for adding new events
+		$("#add").text("Close Event");
+
+	 } else {
+	 	$("#EventDiv").hide();
+		$("#add").text("New Event");
+
+	 }
 });
 
 //$( function() { // thisis for the date picker 
@@ -184,6 +225,51 @@ $( "#SubmitID" ).on( "click", function(){ // this funtion adds new event to the 
 	}
 });
 
+$( "#ShareCodeSubmit" ).on( "click", function(){ 
+	var eventName = $("#shareCodeId").val();
+	var urlID = $("#urlID").val();   
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.open("POST", 
+			"sharecodeinput?shareId=" + eventName
+			+ "&userId=" + '<%=request.getParameter("userId")%>'
+			, true);
+	xhttp.send();
+
+	setTimeout(   function() { location.reload(); }, 1000);
+});
+
+$("#DeleteEvent").on( "click", function(){ // this funtion adds new event to the data object 
+	$("#DeleteAlert").show();
+	$("#infostuff").hide();
+
+	//var eventId = $("#ShareCode").val();   // gets the input data
+	
+	//var xhttp = new XMLHttpRequest();
+	//xhttp.open("POST", 
+			//"deletevent?eventId=" + eventId, true);
+	//xhttp.send();
+	//setTimeout(   function() { location.reload(); }, 1000);
+	
+});
+
+$("#DeleteNah").on( "click", function(){ // this funtion adds new event to the data object 
+	$("#infostuff").show();
+	$("#DeleteAlert").hide();
+	
+});
+
+$("#DeleteYea").on( "click", function(){ // this funtion adds new event to the data object 
+	var delId = $("#ShareCode").text();   // gets the input data
+	
+	var xhttp = new XMLHttpRequest();
+	xhttp.open("POST", "deleteevent?eventId=" + delId, true);
+	xhttp.send();
+	
+	setTimeout(   function() { location.reload(); }, 1000);
+	
+});
+
 function test() {
 	var calendarEl = document.getElementById('calendar');
 
@@ -193,7 +279,8 @@ function test() {
 				initialDate : new Date(),
 				timeZone : 'local',
 				nextDayThreshold: '12:00:00',
-				editable : true,
+				editable : false,
+				eventColor:'#0275d8',
 				selectable : true,
 				businessHours : true,
 				dayMaxEvents : true, // allow "more" link when too many events
@@ -207,6 +294,7 @@ function test() {
 								.html(
 										'<a class="btn btn-outline-primary btn-sm"  href="' + info.event.url + ' ">Launch Meeting </a>');
 						$('#Time').html(info.event.start);
+						$('#ShareCode').html(info.event.id);
 						$("#dialog").dialog({
 							title : "Event Info",
 							width : 500
