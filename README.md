@@ -1,5 +1,5 @@
 # localhosts
-This is a Zoom Calendar Scheduler that works for personal calls and also shared events!
+This is a Zoom Calendar Scheduler that works for personal calls and also share events!
 
 To see a demonstration of the site visit http://mc.dcnelabs.io:8080/localhosts/
 
